@@ -72,12 +72,11 @@ category: 'JezykiProgramowania'!
 !Kwadrat methodsFor: 'arithmetic'!
 + argument
     "dodaj 2 figury w sensie pola lub dodaj liczbę do pola"
-    | nowaFigura |
+    | nowaFigura p |
     (Wielokat checkIfWielokat: argument)
         ifTrue: [
-            nowaFigura := self copy.
-            nowaFigura pole + argument pole.
-            ^nowaFigura
+            p := self pole + argument pole.
+            ^(Kwadrat new) initialize: p sqrt.
         ]
         ifFalse: [
             (argument isKindOf: Number)
@@ -103,7 +102,6 @@ initialize: bok
     | b |
     b := bok asFloat.
     super initialize: 4 name: 'Kwadrat'.
-    wierzcholki at: 1 put: 0@0.
     wierzcholki at: 2 put: b@0.
     wierzcholki at: 3 put: b@b.
     wierzcholki at: 4 put: 0@b.
@@ -119,7 +117,6 @@ category: 'JezykiProgramowania'!
 initialize: podstawaA with: podstawaB with: wysokosc
     "Initialize a rectangular trapezoid with bases a and b, and height h"
     super initialize: 4 name: 'TrapezProstokatny'.
-    wierzcholki at: 1 put: 0@0.
     wierzcholki at: 2 put: podstawaA@0.
     wierzcholki at: 3 put: podstawaB@wysokosc.
     wierzcholki at: 4 put: 0@wysokosc.
@@ -128,12 +125,16 @@ initialize: podstawaA with: podstawaB with: wysokosc
 !TrapezProstokatny methodsFor: 'arithmetic'!
 + argument
     "dodaj 2 figury w sensie pola lub dodaj liczbę do pola"
-    | nowaFigura |
+    | nowaFigura a b h p |
     (Wielokat checkIfWielokat: argument)
         ifTrue: [
-            nowaFigura := self copy.
-            nowaFigura pole + argument pole.
-            ^nowaFigura
+            p := self pole + argument pole.
+            p := p * 2.
+            h := p / ((((wierzcholki at: 2) x) + ((wierzcholki at: 3) x)) * ((wierzcholki at: 3) y)) * ((wierzcholki at: 3) y).
+            p := p / h.
+            a := p * ((wierzcholki at: 2) x) / (((wierzcholki at: 2) x) + ((wierzcholki at:3) x)).
+            b := p * ((wierzcholki at: 3) x) / (((wierzcholki at: 2) x) + ((wierzcholki at:3) x)). 
+            ^(TrapezProstokatny new) initialize: a with: b with: h
         ]
         ifFalse: [
             (argument isKindOf: Number)
@@ -160,7 +161,7 @@ pole
 "============================================="
 
 "--- Inicjalizacja zmiennych testowych ---"
-| kwadrat1 kwadrat2 trapez1 trapez2 suma liczba |
+| kwadrat1 kwadrat2 kwadraat3 trapez1 trapez2 trapez3 suma liczba |
 
 "=== Test 1: Podstawowe operacje na kwadracie ==="
 Transcript cr; show: '=== Test 1: Operacje na kwadracie ==='; cr.
@@ -216,6 +217,14 @@ liczba := 25.0.
 Transcript show: 'Dodawanie liczby ', liczba printString, ' do trapezu:'; cr.
 suma := trapez2 + liczba.
 Transcript show: 'Wynik: ', suma printString; cr.
+
+"Test dodawania figury do figury"
+Transcript show: 'Dodawanie kwadratu do kwadratu';cr.
+kwadrat3 := kwadrat1 + kwadrat2.
+kwadrat3 drukuj.
+Transcript show: 'Dodawanie trapezu do trapezu';cr.
+trapez3 := trapez1 + trapez2.
+trapez3 drukuj.
 
 "=== Test 5: Obsługa błędów ==="
 Transcript cr; show: '=== Test 5: Obsługa błędów ==='; cr.
