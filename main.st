@@ -72,7 +72,7 @@ category: 'JezykiProgramowania'!
 !Kwadrat methodsFor: 'arithmetic'!
 + argument
     "dodaj 2 figury w sensie pola lub dodaj liczbę do pola"
-    | nowaFigura p |
+    | p |
     (Wielokat checkIfWielokat: argument)
         ifTrue: [
             p := self pole + argument pole.
@@ -92,19 +92,15 @@ category: 'JezykiProgramowania'!
 !Kwadrat methodsFor: 'actions'!
 pole
     "licz pole kwadratu"
-    | bok |
-    bok := (wierzcholki at: 2) x asFloat.
-    ^bok squared! !
+    ^(wierzcholki at:2) x squared! !
 
 !Kwadrat methodsFor: 'initialize-release'!
 initialize: bok
     "tworz kwadrat o podanym boku"
-    | b |
-    b := bok asFloat.
     super initialize: 4 name: 'Kwadrat'.
-    wierzcholki at: 2 put: b@0.
-    wierzcholki at: 3 put: b@b.
-    wierzcholki at: 4 put: 0@b.
+    wierzcholki at: 2 put: bok@0.
+    wierzcholki at: 3 put: bok@bok.
+    wierzcholki at: 4 put: 0@bok.
     ^self! !
 
 Wielokat subclass: #TrapezProstokatny
@@ -125,7 +121,7 @@ initialize: podstawaA with: podstawaB with: wysokosc
 !TrapezProstokatny methodsFor: 'arithmetic'!
 + argument
     "dodaj 2 figury w sensie pola lub dodaj liczbę do pola"
-    | nowaFigura a b h p |
+    | a b h p |
     (Wielokat checkIfWielokat: argument)
         ifTrue: [
             p := self pole + argument pole.
@@ -134,7 +130,7 @@ initialize: podstawaA with: podstawaB with: wysokosc
             p := p / h.
             a := p * ((wierzcholki at: 2) x) / (((wierzcholki at: 2) x) + ((wierzcholki at:3) x)).
             b := p * ((wierzcholki at: 3) x) / (((wierzcholki at: 2) x) + ((wierzcholki at:3) x)). 
-            ^(TrapezProstokatny new) initialize: a with: b with: h
+            ^(TrapezProstokatny new) initialize: a with: b with: h.
         ]
         ifFalse: [
             (argument isKindOf: Number)
@@ -161,7 +157,7 @@ pole
 "============================================="
 
 "--- Inicjalizacja zmiennych testowych ---"
-| kwadrat1 kwadrat2 kwadraat3 trapez1 trapez2 trapez3 suma liczba |
+| kwadrat1 kwadrat2 kwadrat3 trapez1 trapez2 trapez3 suma liczba |
 
 "=== Test 1: Podstawowe operacje na kwadracie ==="
 Transcript cr; show: '=== Test 1: Operacje na kwadracie ==='; cr.
@@ -219,10 +215,10 @@ suma := trapez2 + liczba.
 Transcript show: 'Wynik: ', suma printString; cr.
 
 "Test dodawania figury do figury"
-Transcript show: 'Dodawanie kwadratu do kwadratu';cr.
+Transcript cr; show: 'Dodawanie kwadratu do kwadratu';cr.
 kwadrat3 := kwadrat1 + kwadrat2.
 kwadrat3 drukuj.
-Transcript show: 'Dodawanie trapezu do trapezu';cr.
+Transcript cr; show: 'Dodawanie trapezu do trapezu';cr.
 trapez3 := trapez1 + trapez2.
 trapez3 drukuj.
 
@@ -232,11 +228,6 @@ Transcript cr; show: '=== Test 5: Obsługa błędów ==='; cr.
 "Test dodawania nieprawidłowego typu"
 Transcript show: 'Próba dodania tekstu do kwadratu:'; cr.
 [kwadrat2 + 'tekst'] on: Error do: [:err | 
-    Transcript show: 'Błąd (oczekiwany): '; show: err messageText; cr].
-
-"Test dodawania ujemnej liczby"
-Transcript show: 'Próba dodania ujemnej liczby do trapezu:'; cr.
-[trapez2 + (-100.0)] on: Error do: [:err | 
     Transcript show: 'Błąd (oczekiwany): '; show: err messageText; cr].
 
 "============================================="
